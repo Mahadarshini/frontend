@@ -16,7 +16,7 @@ function App() {
      FETCH DATES
   =========================== */
   useEffect(() => {
-    fetch("https://review-analysis-1-wi45.onrender.com/")
+    fetch("https://review-analysis-1-y6ud.onrender.com/")
       .then(res => res.json())
       .then(setDates);
   }, []);
@@ -27,7 +27,7 @@ function App() {
   useEffect(() => {
     if (!selectedDate) return;
 
-    fetch(`https://review-analysis-1-wi45.onrender.com//words/${selectedDate}`)
+    fetch(`https://review-analysis-1-y6ud.onrender.com//words/${selectedDate}`)
       .then(res => res.json())
       .then(setWords);
   }, [selectedDate]);
@@ -39,7 +39,7 @@ function App() {
     if (!selectedWord || !selectedDate) return;
 
     fetch(
-      `https://review-analysis-1-wi45.onrender.com//analytics?word=${selectedWord}&date=${selectedDate}&mistaken=${showMistakes}`
+      `https://review-analysis-1-y6ud.onrender.com//analytics?word=${selectedWord}&date=${selectedDate}&mistaken=${showMistakes}`
     )
       .then(res => res.json())
       .then(setEntries);
