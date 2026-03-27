@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+const BASE_URL = "https://review-analysis-3.onrender.com";
+
 function App() {
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
@@ -16,34 +18,55 @@ function App() {
      FETCH DATES
   =========================== */
   useEffect(() => {
-    fetch("https://review-analysis-2.onrender.com/dates")
-      .then(res => res.json())
-      .then(setDates);
-  }, []);
+  fetch(`${BASE_URL}/dates`)
+    .then(res => res.json())
+    .then((data) => {
+      console.log("DATES:", data);
+
+      if (Array.isArray(data)) {
+        setDates(data);
+      } else {
+        setDates([]);
+      }
+    })
+    .catch(() => setDates([]));
+}, []);
 
   /* ===========================
      FETCH WORDS
   =========================== */
   useEffect(() => {
-    if (!selectedDate) return;
+  if (!selectedDate) return;
 
-    fetch(`https://review-analysis-2.onrender.com/words/${selectedDate}`)
-      .then(res => res.json())
-      .then(setWords);
-  }, [selectedDate]);
+  fetch(`${BASE_URL}/words/${selectedDate}`)
+    .then(res => res.json())
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setWords(data);
+      } else {
+        setWords([]);
+      }
+    });
+}, [selectedDate]);
 
   /* ===========================
      FETCH ANALYTICS
   =========================== */
   useEffect(() => {
-    if (!selectedWord || !selectedDate) return;
+  if (!selectedWord || !selectedDate) return;
 
-    fetch(
-      `https://review-analysis-2.onrender.com/analytics?word=${selectedWord}&date=${selectedDate}&mistaken=${showMistakes}`
-    )
-      .then(res => res.json())
-      .then(setEntries);
-  }, [selectedWord, selectedDate, showMistakes]);
+  fetch(
+    `${BASE_URL}/analytics?word=${selectedWord}&date=${selectedDate}&mistaken=${showMistakes}`
+  )
+    .then(res => res.json())
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setEntries(data);
+      } else {
+        setEntries([]);
+      }
+    });
+}, [selectedWord, selectedDate, showMistakes]);
 
   /* ===========================
      PROCESS DATA
@@ -115,7 +138,7 @@ const processed = entries.map(e => {
   }}
 >
   <option value="">Select Date</option>
-  {dates.map((d, i) => (
+  {Array.isArray(dates) && dates.map((d, i) => (
     <option key={i} value={d.date}>
       {d.date}
     </option>
